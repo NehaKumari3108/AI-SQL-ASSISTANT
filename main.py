@@ -10,13 +10,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from langsmith import traceable
 
-
-
-
-
-# -------------------------
-# Load Environment Variables
-# -------------------------
 load_dotenv()
 
 api_key = os.getenv("LANGCHAIN_API_KEY")
@@ -28,19 +21,11 @@ os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_API_KEY"] = api_key
 os.environ["LANGCHAIN_PROJECT"] = "SQL Assistant"
 
-# -------------------------
-# Database Connection
-# -------------------------
 db_url = "sqlite:///pizzahut.db"
-
-
 
 db = SQLDatabase.from_uri(db_url)
 
-# -------------------------
-# Extract Schema
-# -------------------------
-@traceable #(name="Extract Schema")
+@traceable 
 def extract_schema(db_url):
 
     inspector = inspect(create_engine(db_url))
@@ -77,10 +62,6 @@ def extract_schema(db_url):
 
     return schema_text
 
-
-# -------------------------
-# Text To SQL
-# -------------------------
 @traceable #(name="Text To SQL")
 def text_to_sql(schema, prompt):
     SYSTEM_PROMPT = """
@@ -148,11 +129,7 @@ Return only the result.
     sql_query = re.sub(r"```sql|```", "", sql_query).strip()
     return sql_query
 
-
-# -------------------------
-# Execute SQL
-# -------------------------
-@traceable #(name="SQL Execution")
+@traceable 
 def get_sql_query_from_user_input(user_input):
 
     schema = extract_schema(db_url)
