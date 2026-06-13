@@ -157,5 +157,3 @@ if user_query:
             for item in st.session_state.cache:
                 st.markdown(f"*Question:* {item['question']}")
                 st.dataframe(item["result"], use_container_width=True)
-
-   # st.dataframe(database_response, use_container_width=True
